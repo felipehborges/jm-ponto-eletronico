@@ -1,8 +1,3 @@
-import axios from "axios";
-import type {
-  GetEmployeedByIdProps,
-  GetSchedulesByEmployeeIdProps,
-} from "./api.types";
 import { api } from "./api";
 
 export const getEmployees = async () => {

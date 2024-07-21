@@ -1,4 +1,4 @@
-import type { GetEmployeedByIdProps } from "@/api/api.types";
+import type { GetEmployeedByIdProps } from "@/types/api.types";
 import { create } from "zustand";
 
 interface AppState {

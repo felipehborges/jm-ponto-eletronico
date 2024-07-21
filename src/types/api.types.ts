@@ -16,26 +16,26 @@ export interface GetEmployeedByIdProps {
 
 // getSchedulesByEmployeeId
 // https://v3.controledepontojm.com/attendances/employee/:id
-export type SchedulesListProps = Array<GetSchedulesByEmployeeIdProps>;
+export type SchedulesListProps = Array<EmployeeScheduleProps>;
 
-export interface GetSchedulesByEmployeeIdProps {
+export interface EmployeeScheduleProps {
   attendanceId: string;
   employee: EmployeeProps;
   clockedIn: string;
   lunchStart: string;
   lunchEnd: string;
   clockedOut?: string;
-  delay: number;
-  hoursWorked: number;
-  extraTime: number;
-  createdAt: string;
-  updatedAt: string;
+  delay?: number;
+  hoursWorked?: number;
+  extraTime?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface EmployeeProps {
-  id: string;
-  name: string;
-  rfid: string;
+  id?: string;
+  name?: string;
+  rfid?: string;
 }
 
 export interface IEmployeeProps {
