@@ -1,16 +1,23 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ModeToggle } from "./components/mode-toggle";
-import Demo from "./pages/demo";
+import AppRoutes from "./routes";
+import { ThemeProvider } from "./components/theme-provider";
 
 export default function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <div className="p-4 w-full flex gap-2 items-center flex-col">
-        <ModeToggle />
-        <div className="w-2/3">
-          <Demo />
-        </div>
-      </div>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+        <>
+          {/* TODO: Create a navbar */}
+          <div className="absolute top-4 right-4">
+            <ModeToggle />
+          </div>
+
+          <AppRoutes />
+        </>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

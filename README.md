@@ -1,3 +1,3 @@
-# VITE BLUEPRINT
+# JM ELETRO MOTORES | Ponto Eletrônico
 
-TypeScript, React, TailwindCSS, Zustand, TanStack Query, Shadcn/UI and Biome.
+Front-end.
