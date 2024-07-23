@@ -1,12 +1,10 @@
 import { getEmployees } from "@/api/api.routes";
 import EmployeesCard from "@/components/employees-card";
 import Footer from "@/components/footer";
-import Menu from "@/components/menu";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import {
   LuBaggageClaim,
-  LuCloudSun,
   LuHammer,
   LuSandwich,
   LuUserX,
@@ -24,12 +22,6 @@ export default function HomePage() {
 
   return (
     <div className="h-full px-10 pt-10 pb-4">
-      <Menu />
-
-      <header className="flex justify-center items-center">
-        <h1 className="text-primary text-2xl lg:text-4xl">JM ELETRO MOTORES</h1>
-      </header>
-
       <EmployeesCard />
 
       <section className="flex flex-col gap-2 h-lvh">

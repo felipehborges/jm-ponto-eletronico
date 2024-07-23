@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import Footer from "@/components/footer";
+import JmTitle from "@/components/jm-title";
 
 interface UserData {
   username: string;
@@ -25,7 +26,7 @@ interface LoginResponse {
 //   return data;
 // };
 
-// TODO: Implement login
+// TODO: Implementar login
 const loginUser = async (userData: UserData): Promise<LoginResponse> => {
   const { data } = await axios.post<LoginResponse>("/api/login", userData);
   return data;
@@ -52,9 +53,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen justify-center flex-col lg:pt-20 lg:px-20 p-4">
       <div className="flex-grow lg:flex">
         <section className="w-full lg:w-1/2 flex-1 flex justify-center flex-col items-center">
-          <h1 className="text-xl lg:text-4xl font-bold text-primary">
-            JM ELETRO MOTORES
-          </h1>
+          <JmTitle />
 
           <p className="text-secondary-foreground">
             Sistema de ponto eletrônico

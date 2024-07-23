@@ -1,5 +1,3 @@
-import { Moon, Sun } from "lucide-react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +6,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "./ui/button";
+import { LuMoon, LuSun } from "react-icons/lu";
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
@@ -16,20 +15,20 @@ export function ModeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <Sun className="dark:-rotate-90 h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+          <LuSun className="dark:-rotate-90 h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:scale-0" />
+          <LuMoon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Mudar tema</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          Claro
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          Escuro
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          Sistema
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

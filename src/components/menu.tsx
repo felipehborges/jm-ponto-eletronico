@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
 import { FaUmbrellaBeach } from "react-icons/fa";
 import { LuLayoutGrid, LuLogOut, LuMenu, LuUser } from "react-icons/lu";
 
 export default function Menu() {
   return (
-    <div className="absolute top-4 left-4">
+    <div>
       <Sheet>
         <SheetTrigger>
-          <Button size="icon">
+          <Button variant="default" size="icon">
             <LuMenu />
           </Button>
         </SheetTrigger>
@@ -25,7 +25,24 @@ export default function Menu() {
           </SheetHeader> */}
 
           <div className="flex h-full py-20 items-center flex-col justify-around">
-            <TooltipProvider>
+            <Button size="icon">
+              <LuLayoutGrid className="text-lg" />
+            </Button>
+
+            <Button size="icon">
+              <FaUmbrellaBeach className="text-lg" />
+            </Button>
+
+            <Button size="icon">
+              <LuUser className="text-lg" />
+            </Button>
+
+            <Button variant="destructive" size="icon">
+              <LuLogOut className="rotate-180 text-lg" />
+            </Button>
+
+            {/* FIXME: Primeiro tooltip abrindo mesmo sem passar o mouse */}
+            {/* <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button size="icon">
@@ -65,7 +82,7 @@ export default function Menu() {
 
                 <TooltipContent>Sair</TooltipContent>
               </Tooltip>
-            </TooltipProvider>
+            </TooltipProvider> */}
           </div>
         </SheetContent>
       </Sheet>
