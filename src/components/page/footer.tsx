@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="p-2 flex justify-center items-end lg:p-4">
+    <footer className="p-2 flex justify-center lg:p-4">
       <p className="text-center text-primary text-xs">
         Desenvolvido por Gustavo Gomes | gugomes688@hotmail.com
         <br />

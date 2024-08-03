@@ -8,9 +8,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-        <>
-          <AppRoutes />
-        </>
+        <AppRoutes />
       </ThemeProvider>
     </QueryClientProvider>
   );
