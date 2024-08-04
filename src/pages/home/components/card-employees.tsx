@@ -1,10 +1,10 @@
 import { getEmployees } from "@/services/api.routes";
 import type { EmployeeResult } from "@/services/api.types";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "../../../components/spinner";
-import { Button } from "../../../components/ui/button";
-import { Card, CardHeader, CardTitle } from "../../../components/ui/card";
-import { TableBody, TableCell, TableRow } from "../../../components/ui/table";
+import Spinner from "@/components/spinner";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 export default function EmployeesCard() {
   const {

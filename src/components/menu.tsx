@@ -42,7 +42,7 @@ export default function Menu() {
                   <Button size="icon">
                     <FaUmbrellaBeach
                       className="text-lg"
-                      onClick={() => navigate("/holidays")}
+                      onClick={() => navigate("/daysoff")}
                     />
                   </Button>
                 </TooltipTrigger>

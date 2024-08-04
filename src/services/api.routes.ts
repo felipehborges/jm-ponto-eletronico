@@ -1,4 +1,9 @@
-import type { GetAttendanceResponse, GetEmployeesResponse } from "./api.types";
+import type {
+  CreateDayOffProps,
+  GetAttendanceResponse,
+  GetDaysOffResponse,
+  GetEmployeesResponse,
+} from "./api.types";
 import { API } from "./base";
 
 export const getEmployees = async () => {
@@ -21,4 +26,18 @@ export const getTodayAttendances = async () => {
     : [data];
 
   return todaysSchedules;
+};
+
+// TODO: Update route to "dayoff"
+export const getDaysOff = async () => {
+  const response = await API.get<GetDaysOffResponse>("/holiday");
+  return response.data.result;
+};
+
+export const createDayOff = async (newDayOff: CreateDayOffProps) => {
+  await API.post("/holiday", newDayOff);
+};
+
+export const deleteDayOff = async (id: string) => {
+  await API.delete(`/holiday/${id}`);
 };

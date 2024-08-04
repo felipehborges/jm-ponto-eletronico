@@ -50,3 +50,27 @@ export interface IEmployee {
 }
 
 // ================================================
+
+// Listar todos os days off
+// GET /holiday
+
+export interface GetDaysOffResponse {
+  result: IDayOff[];
+  totalRegisters: number;
+  totalPages: number;
+  currentPage: number;
+}
+
+export interface IDayOff {
+  id: string;
+  reason: string;
+  date: string;
+}
+
+export interface CreateDayOffProps {
+  id: string;
+  date: string;
+  reason: string;
+  createdAt: string;
+  updatedAt: string;
+}
