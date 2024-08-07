@@ -28,7 +28,7 @@ export const getTodayAttendances = async () => {
   return todaysSchedules;
 };
 
-// TODO: Update route to "dayoff"
+// TODO: Backend update route to "dayoff"
 export const getDaysOff = async () => {
   const response = await API.get<GetDaysOffResponse>("/holiday");
   return response.data.result;

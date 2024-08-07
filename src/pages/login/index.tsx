@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useStore } from "@/store/useStore";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaWhatsapp } from "react-icons/fa";
 import JmTitle from "@/components/jm-title";
 import PageTemplate from "@/components/page/page-template";
+import { useStore } from "@/store";
 
 interface UserData {
   username: string;
