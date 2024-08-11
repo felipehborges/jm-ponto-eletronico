@@ -16,10 +16,7 @@ import { Button } from "../../components/ui/button";
 export default function EmployeesPage() {
   const { data: employeesData } = useQuery({
     queryKey: ["getEmployeeQuery"],
-    queryFn: async () => {
-      const response = await getEmployees();
-      return response;
-    },
+    queryFn: async () => await getEmployees(),
   });
 
   return (

@@ -41,7 +41,7 @@ export default function LoginPage() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       setUser(data.user);
-      navigate("/home");
+      navigate("/admin");
     },
   });
 

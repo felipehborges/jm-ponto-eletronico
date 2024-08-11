@@ -32,7 +32,7 @@ export default function Menu() {
         <SheetContent side="left" className="w-24">
           <div className="flex h-full py-20 items-center flex-col justify-around">
             {/* FIXME: Primeiro tooltip abrindo mesmo sem passar o mouse */}
-            <Button size="icon" onClick={() => navigate("/home")}>
+            <Button size="icon" onClick={() => navigate("/admin")}>
               <LuLayoutGrid className="text-lg" />
             </Button>
 

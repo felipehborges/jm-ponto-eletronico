@@ -7,7 +7,7 @@ interface HomeCardProps {
   description: string;
 }
 
-export default function HomeCard({ data, icon, description }: HomeCardProps) {
+export default function AdminCard({ data, icon, description }: HomeCardProps) {
   return (
     <Card className="w-60 h-60 flex flex-col justify-between m-2">
       <CardHeader>

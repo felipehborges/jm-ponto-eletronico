@@ -13,6 +13,9 @@
           "fix": "safe",
           "options": {}
         }
+      },
+      "style": {
+        "useImportType": "warn"
       }
     }
   },

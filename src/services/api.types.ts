@@ -2,73 +2,73 @@
 // GET /employee
 
 export interface GetEmployeesResponse {
-	result: IEmployee[];
-	totalRegisters: number;
-	totalPages: number;
-	currentPage: number;
+  result: IEmployee[];
+  totalRegisters: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface IEmployee {
-	id: string;
-	name: string;
-	position: string;
-	rfid: string;
-	imgUrl: string;
-	journeyId: string;
-	createdAt: string;
-	updatedAt: string;
+  id: string;
+  name: string;
+  position: string;
+  rfid: string;
+  imgUrl: string;
+  journeyId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Listar todos os horários
 // GET /attendance
 
 export interface GetAttendanceResponse {
-	result: IAttendance[];
-	totalRegisters: number;
-	totalPages: number;
-	currentPage: number;
+  result: IAttendance[];
+  totalRegisters: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface IAttendance {
-	attendanceId: string;
-	employee: {
-		id: string;
-		name: string;
-		rfid: string;
-	};
-	clockedIn: string;
-	lunchStart: string;
-	lunchEnd?: string;
-	clockedOut?: string;
-	delay: number;
-	hoursWorked: number;
-	extraTime: number;
-	createdAt: string;
-	updatedAt: string;
+  attendanceId: string;
+  employee: Employee;
+  clockedIn: string;
+  lunchStart: string;
+  lunchEnd?: string;
+  clockedOut?: string;
+  delay: number;
+  hoursWorked: number;
+  extraTime: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// ================================================
+export interface Employee {
+  id: string;
+  name: string;
+  rfid: string;
+}
 
 // Listar todos os days off
 // GET /holiday
 
 export interface GetDaysOffResponse {
-	result: IDayOff[];
-	totalRegisters: number;
-	totalPages: number;
-	currentPage: number;
+  result: IDayOff[];
+  totalRegisters: number;
+  totalPages: number;
+  currentPage: number;
 }
 
 export interface IDayOff {
-	id: string;
-	reason: string;
-	date: string;
+  id: string;
+  reason: string;
+  date: string;
 }
 
 export interface CreateDayOffProps {
-	id: string;
-	date: string;
-	reason: string;
-	createdAt: string;
-	updatedAt: string;
+  id: string;
+  date: string;
+  reason: string;
+  createdAt: string;
+  updatedAt: string;
 }
