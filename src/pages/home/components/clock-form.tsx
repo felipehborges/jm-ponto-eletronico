@@ -57,6 +57,9 @@ export default function ClockForm() {
     );
   };
 
+  // TODO: Implement the current date
+  const currentDate = new Date().toISOString().split("T")[0];
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

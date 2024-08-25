@@ -88,16 +88,16 @@ const deleteDayOff = async (dayOffId: string) =>
 
 // SCHEDULE SERVICES
 const registerStartTime = async (props: RegisterStartTimeProps) =>
-  await API.post<ScheduleResponse>("/schedule/start/", props);
+  await API.post<ScheduleResponse>("/schedules/clockedIn", props);
 
 const registerLunchStart = async (props: RegisterLunchStartProps) =>
-  await API.post<ScheduleResponse>("/schedule/lunch/start/", props);
+  await API.post<ScheduleResponse>("/schedules/lunchstart", props);
 
 const registerLunchEnd = async (props: RegisterLunchEndProps) =>
-  await API.post<ScheduleResponse>("/schedule/lunch/end/", props);
+  await API.post<ScheduleResponse>("/schedules/lunchEnd", props);
 
 const registerClockedOut = async (props: RegisterClockedOutProps) =>
-  await API.post<ScheduleResponse>("/schedule/end/", props);
+  await API.post<ScheduleResponse>("/schedules/clockedOut", props);
 
 // JUSTIFICATION SERVICES
 
