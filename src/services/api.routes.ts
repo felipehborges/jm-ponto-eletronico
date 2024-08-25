@@ -1,42 +1,107 @@
 import type {
   CreateDayOffProps,
-  GetAttendanceResponse,
+  CreateEmployeeProps,
+  GetAttendancesByEmployeeIdResponse,
+  GetAttendancesResponse,
   GetDaysOffResponse,
+  GetEmployeeByIdResponse,
   GetEmployeesResponse,
+  AuthProps,
+  RegisterProps,
 } from "./api.types";
 import { API } from "./base";
 
-export const getEmployees = async () => {
-  const response = await API.get<GetEmployeesResponse>("/employee");
-  return response.data.result;
+// AUTH SERVICES
+const auth = async (credentials: AuthProps) => {
+  const response = await API.post("/auth/authenticate", credentials);
+  return response.data;
 };
 
-export const getAttendances = async () => {
-  const response = await API.get<GetAttendanceResponse>("/attendances");
-  return response.data.result;
+const register = async (credentials: RegisterProps) => {
+  const response = await API.post("/auth/register", credentials);
+  return response.data;
 };
 
-export const getTodayAttendances = async () => {
-  const response = await API.get<GetAttendanceResponse>("/attendances");
-  const data = response.data.result;
-
-  const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
-  const todaysSchedules = Array.isArray(data)
-    ? data.filter((item) => item.clockedIn.startsWith(today))
-    : [data];
-
-  return todaysSchedules;
+// EMPLOYEE SERVICES
+const getEmployees = async () => {
+  const response = await API.get<GetEmployeesResponse>("/employee/list");
+  return response.data;
 };
 
-export const getDaysOff = async () => {
-  const response = await API.get<GetDaysOffResponse>("/daysoff");
-  return response.data.result;
+const getEmployeeById = async (employeeId: string) => {
+  const response = await API.get<GetEmployeeByIdResponse>(
+    `/employee/${employeeId}`,
+  );
+  return response.data;
 };
 
-export const createDayOff = async (newDayOff: CreateDayOffProps) => {
-  await API.post("/daysoff", newDayOff);
+const createEmployee = async (newEmployee: CreateEmployeeProps) =>
+  await API.post("/employee/create", newEmployee);
+
+const deleteEmployee = async (employeeId: string) =>
+  await API.delete(`/employee/delete/${employeeId}`);
+
+// ATTENDANCE SERVICES
+const getAttendances = async () => {
+  const response = await API.get<GetAttendancesResponse>("/attendances/list");
+  return response.data;
 };
 
-export const deleteDayOff = async (id: string) => {
-  await API.delete(`/daysoff/${id}`);
+const getAttendancesByEmployeeId = async (employeeId: string) => {
+  const response = await API.get<GetAttendancesByEmployeeIdResponse>(
+    `/attendances/employee/${employeeId}`,
+  );
+  return response.data;
 };
+
+const deleteAttendance = async (attendanceId: string) =>
+  await API.delete(`/attendances/${attendanceId}`);
+
+// DAY OFF SERVICES
+const getDaysOff = async () => {
+  const response = await API.get<GetDaysOffResponse>("/daysoff/list");
+  return response.data;
+};
+
+const createDayOff = async (dayOffProps: CreateDayOffProps) =>
+  await API.post("/daysoff/create", dayOffProps);
+
+const deleteDayOff = async (dayOffId: string) =>
+  await API.delete(`/daysoff/delete/${dayOffId}`);
+
+// JOURNEY SERVICES
+
+// SCHEDULE SERVICES
+
+// JUSTIFICATION SERVICES
+
+// REPORT SERVICES
+
+const getReportPdf = async () => {
+  const response = await API.get("/report/pdf");
+  return response.data;
+};
+
+const getReportHttp = async () => {
+  const response = await API.get("/report");
+  return response.data;
+};
+
+const apiPonto = {
+  auth,
+  register,
+  getEmployees,
+  getEmployeeById,
+  createEmployee,
+  deleteEmployee,
+  getAttendances,
+  getAttendancesByEmployeeId,
+  deleteAttendance,
+  getDaysOff,
+  createDayOff,
+  deleteDayOff,
+  getReportPdf,
+  getReportHttp,
+};
+
+export default apiPonto;

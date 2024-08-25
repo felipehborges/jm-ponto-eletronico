@@ -1,18 +1,21 @@
 import {
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
 } from "@/components/ui/table";
 import { formatTime } from "@/lib/utils";
-import { getAttendances } from "@/services/api.routes";
-import type { IAttendance } from "@/services/api.types";
+import apiPonto from "@/services/api.routes";
+import type { Attendance } from "@/services/api.types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function AttendancesTable() {
-  const { data: attendances, isLoading: attendancesIsLoading } = useQuery({
-    queryKey: ["getAttendancesQuery"],
-    queryFn: () => getAttendances(),
+  const { data: attendancesData, isLoading: attendancesIsLoading } = useQuery({
+    queryKey: ["apiPonto.getAttendances"],
+    queryFn: async () => {
+      const response = await apiPonto.getAttendances();
+      return response.result;
+    },
   });
 
   if (attendancesIsLoading) {
@@ -30,7 +33,7 @@ export default function AttendancesTable() {
           <TableHead className="text-center">Saída</TableHead>
         </TableRow>
 
-        {attendances?.map((attendance: IAttendance) => (
+        {attendancesData?.map((attendance: Attendance) => (
           <TableRow key={attendance?.attendanceId}>
             <TableCell>{attendance?.employee?.name}</TableCell>
             <TableCell className="text-center">

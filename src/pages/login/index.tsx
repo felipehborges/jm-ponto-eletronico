@@ -1,53 +1,34 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { FaWhatsapp } from "react-icons/fa";
 import JmTitle from "@/components/jm-title";
 import PageTemplate from "@/components/page/page-template";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import apiPonto from "@/services/api.routes";
 import { useStore } from "@/store";
-
-interface UserData {
-  username: string;
-  password: string;
-}
-
-interface LoginResponse {
-  user: string;
-  token: string;
-}
-
-// const loginUser = async (userData: {
-//   username: string;
-//   password: string;
-// }) => {
-//   const { data } = await axios.post("/api/login", userData);
-//   return data;
-// };
-
-// TODO: Implementar login
-const loginUser = async (userData: UserData): Promise<LoginResponse> => {
-  const { data } = await axios.post<LoginResponse>("/api/login", userData);
-  return data;
-};
+import { useMutation } from "@tanstack/react-query";
+import { FaWhatsapp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const setUser = useStore((s) => s.setUser);
 
-  const setUser = useStore((state) => state.setUser);
-
-  const mutation = useMutation<LoginResponse, Error, UserData>({
-    mutationFn: loginUser,
+  const { mutateAsync: login, isPending: loginPending } = useMutation({
+    mutationKey: ["apiPonto.auth"],
+    mutationFn: async () => {
+      const response = await apiPonto.auth({
+        email: "",
+        password: "",
+      });
+      return response;
+    },
     onSuccess: (data) => {
-      setUser(data.user);
-      navigate("/admin");
+      setUser(data);
+      navigate("/home");
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
-
-  const handleLogin = () => {
-    mutation.mutate({ username: "test", password: "password" });
-  };
 
   return (
     <PageTemplate navbar={false}>
@@ -84,8 +65,8 @@ export default function LoginPage() {
             <Button
               size="lg"
               className="lg:text-lg lg:py-6 lg:px-10"
-              onClick={handleLogin}
-              disabled={mutation.isPending}
+              onClick={() => login}
+              disabled={loginPending}
             >
               Login
             </Button>

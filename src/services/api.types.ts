@@ -1,14 +1,42 @@
-// Listar todos os funcionários
-// GET /employee
+// AUTH TYPES
+export interface AuthProps {
+  email: string;
+  password: string;
+}
+
+export interface RegisterProps {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
+// EMPLOYEE TYPES
+export interface EmployeeMin {
+  id: string;
+  name: string;
+  rfid: string;
+}
+
+export interface Employee {
+  id: string;
+  name: string;
+  position: string;
+  rfid: string;
+  imgUrl: string;
+  journeyId: string;
+  createdAt: string;
+  updatedAt?: string;
+}
 
 export interface GetEmployeesResponse {
-  result: IEmployee[];
+  result: Employee[];
   totalRegisters: number;
   totalPages: number;
   currentPage: number;
 }
 
-export interface IEmployee {
+export interface GetEmployeeByIdResponse {
   id: string;
   name: string;
   position: string;
@@ -19,21 +47,24 @@ export interface IEmployee {
   updatedAt: string;
 }
 
-// Listar todos os horários
-// GET /attendance
-
-export interface GetAttendanceResponse {
-  result: IAttendance[];
-  totalRegisters: number;
-  totalPages: number;
-  currentPage: number;
+export interface CreateEmployeeProps {
+  name: string;
+  position: string;
+  imgUrl: string;
+  rfid: string;
+  journeyId: string;
 }
 
-export interface IAttendance {
+// ATTENDANCE TYPES
+export interface Attendance {
   attendanceId: string;
-  employee: Employee;
+  employee: {
+    id: string;
+    name: string;
+    rfid: string;
+  };
   clockedIn: string;
-  lunchStart: string;
+  lunchStart?: string;
   lunchEnd?: string;
   clockedOut?: string;
   delay: number;
@@ -43,32 +74,38 @@ export interface IAttendance {
   updatedAt: string;
 }
 
-export interface Employee {
-  id: string;
-  name: string;
-  rfid: string;
-}
-
-// Listar todos os days off
-// GET /holiday
-
-export interface GetDaysOffResponse {
-  result: IDayOff[];
+export interface GetAttendancesResponse {
+  result: Attendance[];
   totalRegisters: number;
   totalPages: number;
   currentPage: number;
 }
 
-export interface IDayOff {
+export type GetAttendancesByEmployeeIdResponse = Attendance[];
+
+// DAY OFF TYPES
+export interface DayOff {
   id: string;
   reason: string;
   date: string;
 }
 
-export interface CreateDayOffProps {
-  id: string;
-  date: string;
-  reason: string;
-  createdAt: string;
-  updatedAt: string;
+export interface GetDaysOffResponse {
+  result: DayOff[];
+  totalRegisters: number;
+  totalPages: number;
+  currentPage: number;
 }
+
+export interface CreateDayOffProps {
+  reason: string;
+  date: string;
+}
+
+// JOURNEY TYPES
+
+// SCHEDULE TYPES
+
+// JUSTIFICATION TYPES
+
+// REPORT TYPES

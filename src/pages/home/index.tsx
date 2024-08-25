@@ -1,14 +1,10 @@
 import Footer from "@/components/page/footer";
 import { cn } from "@/lib/utils";
 import AttendancesTable from "./components/attendance-table";
-import HomeNavbar from "./components/navbar";
 import { ClockForm } from "./components/clock-form";
+import HomeNavbar from "./components/navbar";
 
-interface HomePageProps {
-  className?: string;
-}
-
-export default function HomePage({ className }: HomePageProps) {
+export default function HomePage({ className }: { className?: string }) {
   return (
     <div className={cn("flex flex-col min-h-screen", className)}>
       <HomeNavbar />

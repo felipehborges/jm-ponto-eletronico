@@ -7,16 +7,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getEmployees } from "@/services/api.routes";
-import type { IEmployee } from "@/services/api.types";
 import { useQuery } from "@tanstack/react-query";
 import { LuPlus } from "react-icons/lu";
 import { Button } from "../../components/ui/button";
+import apiPonto from "@/services/api.routes";
+import type { Employee } from "@/services/api.types";
 
 export default function EmployeesPage() {
   const { data: employeesData } = useQuery({
-    queryKey: ["getEmployeeQuery"],
-    queryFn: async () => await getEmployees(),
+    queryKey: ["apiPonto.getEmployees"],
+    queryFn: async () => {
+      const response = await apiPonto.getEmployees();
+      return response.result;
+    },
   });
 
   return (
@@ -35,19 +38,19 @@ export default function EmployeesPage() {
           </TableHeader>
 
           <TableBody>
-            {employeesData?.map((item: IEmployee) => (
-              <TableRow className="text-center" key={item?.id}>
+            {employeesData?.map((employee: Employee) => (
+              <TableRow className="text-center" key={employee?.id}>
                 <TableCell className="px-0 flex justify-center">
                   <img
-                    src={item?.imgUrl}
+                    src={employee?.imgUrl}
                     alt="picture-employee"
                     className="lg:w-20 w-14 rounded-md shadow-sm"
                   />
                 </TableCell>
-                {/* <TableCell>{item?.id}</TableCell> */}
-                <TableCell>{item?.name}</TableCell>
-                <TableCell>{item?.position}</TableCell>
-                <TableCell>{item?.rfid}</TableCell>
+                {/* <TableCell>{employee?.id}</TableCell> */}
+                <TableCell>{employee?.name}</TableCell>
+                <TableCell>{employee?.position}</TableCell>
+                <TableCell>{employee?.rfid}</TableCell>
                 <TableCell className="text-center">
                   <Button size="icon">
                     <LuPlus />

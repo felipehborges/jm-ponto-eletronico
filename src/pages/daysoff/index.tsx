@@ -1,18 +1,6 @@
 import PageTemplate from "@/components/page/page-template";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { formatDate } from "@/lib/utils";
-import { createDayOff, getDaysOff } from "@/services/api.routes";
-import type { IDayOff } from "@/services/api.types";
-import { useQuery } from "@tanstack/react-query";
-import { LuTrash } from "react-icons/lu";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -21,31 +9,39 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { format } from "date-fns";
-import { LuCalendar } from "react-icons/lu";
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn, formatDate } from "@/lib/utils";
+import apiPonto from "@/services/api.routes";
+import type { DayOff } from "@/services/api.types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { format } from "date-fns";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { LuCalendar, LuTrash } from "react-icons/lu";
+import { z } from "zod";
 
-// TODO: Limite de caracteres no backend?
 const formSchema = z.object({
   dayOffName: z.string().min(2).max(30),
   dayOffDate: z.date(),
@@ -64,8 +60,6 @@ export default function DaysOffPage() {
     },
   });
 
-
-
   function onSubmitHandler(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
@@ -73,8 +67,11 @@ export default function DaysOffPage() {
   }
 
   const { data: getDaysOffData } = useQuery({
-    queryKey: ["getDaysOffQuery"],
-    queryFn: getDaysOff,
+    queryKey: ["apiPonto.getDaysOff"],
+    queryFn: async () => {
+      const response = await apiPonto.getDaysOff();
+      return response.result;
+    },
   });
 
   return (
@@ -169,10 +166,10 @@ export default function DaysOffPage() {
           </TableHeader>
 
           <TableBody>
-            {getDaysOffData?.map((item: IDayOff) => (
-              <TableRow key={item?.id}>
-                <TableCell>{item?.reason}</TableCell>
-                <TableCell>{formatDate(item?.date)}</TableCell>
+            {getDaysOffData?.map((dayoff: DayOff) => (
+              <TableRow key={dayoff?.id}>
+                <TableCell>{dayoff?.reason}</TableCell>
+                <TableCell>{formatDate(dayoff?.date)}</TableCell>
                 <TableCell className="text-center">
                   <Button size="icon" variant="destructive">
                     <LuTrash />
