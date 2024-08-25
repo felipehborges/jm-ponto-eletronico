@@ -3,22 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { today } from "@/lib/utils";
-import { getEmployees } from "@/services/api.routes";
-import type { IEmployee } from "@/services/api.types";
+import apiPonto from "@/services/api.routes";
+import type { Employee } from "@/services/api.types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function EmployeesCard() {
   const {
-    data: employees,
-    isLoading: getEmployeesLoading,
-    error: getEmployeesError,
+    data: employeesData,
+    isLoading: employeesDataLoading,
+    error: employeesDataError,
   } = useQuery({
-    queryKey: ["getEmployeesQuery"],
-    queryFn: getEmployees,
+    queryKey: ["apiPonto.getEmployees"],
+    queryFn: async () => {
+      const response = await apiPonto.getEmployees();
+      return response.result;
+    },
   });
 
-  if (getEmployeesLoading) return <Spinner />;
-  if (getEmployeesError) return <div>Erro ao carregar</div>;
+  if (employeesDataLoading) return <Spinner />;
+  if (employeesDataError) return <div>Erro ao carregar</div>;
 
   return (
     <Card className="mx-4 mt-4">
@@ -32,7 +35,7 @@ export default function EmployeesCard() {
       </CardHeader>
 
       <TableBody>
-        {employees?.map((employee: IEmployee) => (
+        {employeesData?.map((employee: Employee) => (
           <TableRow key={employee?.id}>
             <TableCell>{employee?.name}</TableCell>
             <TableCell>{employee?.rfid}</TableCell>
