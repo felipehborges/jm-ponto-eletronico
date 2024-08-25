@@ -11,39 +11,70 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import { useMutation } from "@tanstack/react-query";
+import apiPonto from "@/services/api.routes";
+import { RegisterStartTimeProps } from "@/services/api.types";
 
 const FormSchema = z.object({
-  type: z.enum(["all", "mentions", "none"], {
-    required_error: "You need to select a notification type.",
-  }),
+  rfid: z.string().min(1, "O campo de RFID é obrigatório"),
+  scheduleType: z.enum(["clockedIn", "lunchStart", "lunchEnd", "clockedOut"]),
 });
 
-export function ClockForm() {
+export default function ClockForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  const { mutateAsync } = useMutation({
+    mutationKey: ["apiPonto.attendance"],
+    mutationFn: async (props: RegisterStartTimeProps) => {
+      const response = await apiPonto.registerStartTime({
+        rfid: props?.rfid,
+        clockedIn: props?.clockedIn,
+      });
+      return response;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    await mutateAsync({
+      rfid: form.getValues("rfid"),
+      clockedIn: data.scheduleType,
     });
-  }
+
+    toast(
+      <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+      </pre>,
+    );
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <Input placeholder="RFID" />
+        <FormField
+          control={form.control}
+          name="rfid"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input {...field} placeholder="RFID" className="w-full" />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
-          name="type"
+          name="scheduleType"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Selecione o tipo...</FormLabel>
@@ -55,17 +86,15 @@ export function ClockForm() {
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="all" />
+                      <RadioGroupItem value="clockedIn" />
                     </FormControl>
-
                     <FormLabel className="font-normal">Entrada</FormLabel>
                   </FormItem>
 
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="mentions" />
+                      <RadioGroupItem value="lunchStart" />
                     </FormControl>
-
                     <FormLabel className="font-normal">
                       Início do almoço
                     </FormLabel>
@@ -73,7 +102,7 @@ export function ClockForm() {
 
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="none" />
+                      <RadioGroupItem value="lunchEnd" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Retorno do almoço
@@ -82,7 +111,7 @@ export function ClockForm() {
 
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
-                      <RadioGroupItem value="none" />
+                      <RadioGroupItem value="clockedOut" />
                     </FormControl>
                     <FormLabel className="font-normal">Saída</FormLabel>
                   </FormItem>

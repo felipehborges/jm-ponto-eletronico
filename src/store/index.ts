@@ -1,17 +1,23 @@
-import type { EmployeeResult } from "@/services/api.types";
+import type { Employee } from "@/services/api.types";
 import { create } from "zustand";
 
 type AppState = {
   user: string | null;
-  setUser: (user: string | null) => void;
+  setUser(user: string | null): void;
 
-  employees: Array<EmployeeResult>;
-  setEmployees: (employees: Array<EmployeeResult>) => void;
+  accessToken: string | null;
+  setAccessToken(accessToken: string | null): void;
+
+  employees: Employee[];
+  setEmployees: (employees: Employee[]) => void;
 };
 
 export const useStore = create<AppState>()((set) => ({
   user: null,
   setUser: (user) => set({ user }),
+
+  accessToken: null,
+  setAccessToken: (accessToken) => set({ accessToken }),
 
   employees: [],
   setEmployees: (employees) => set({ employees }),

@@ -3,6 +3,7 @@ import PageTemplate from "@/components/page/page-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import apiPonto from "@/services/api.routes";
+import type { AuthProps } from "@/services/api.types";
 import { useStore } from "@/store";
 import { useMutation } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
@@ -10,19 +11,21 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const setUser = useStore((s) => s.setUser);
+  const { setAccessToken } = useStore((s) => ({
+    setAccessToken: s.setAccessToken,
+  }));
 
   const { mutateAsync: login, isPending: loginPending } = useMutation({
     mutationKey: ["apiPonto.auth"],
-    mutationFn: async () => {
+    mutationFn: async (props: AuthProps) => {
       const response = await apiPonto.auth({
-        email: "",
-        password: "",
+        email: props?.email,
+        password: props?.password,
       });
       return response;
     },
     onSuccess: (data) => {
-      setUser(data);
+      setAccessToken(data?.token);
       navigate("/home");
     },
     onError: (error) => {

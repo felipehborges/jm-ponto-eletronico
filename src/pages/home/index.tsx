@@ -1,7 +1,7 @@
 import Footer from "@/components/page/footer";
 import { cn } from "@/lib/utils";
 import AttendancesTable from "./components/attendance-table";
-import { ClockForm } from "./components/clock-form";
+import ClockForm from "./components/clock-form";
 import HomeNavbar from "./components/navbar";
 
 export default function HomePage({ className }: { className?: string }) {

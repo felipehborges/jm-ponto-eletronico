@@ -1,19 +1,20 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./global.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./components/theme-provider.tsx";
+import { Toaster } from "./components/ui/toaster.tsx";
+import "./global.css";
+import AdminPage from "./pages/admin/index.tsx";
 import DaysOffPage from "./pages/daysoff/index.tsx";
 import EmployeesPage from "./pages/employees/index.tsx";
-import LoginPage from "./pages/login/index.tsx";
 import HomePage from "./pages/home/index.tsx";
-import AdminPage from "./pages/admin/index.tsx";
+import LoginPage from "./pages/login/index.tsx";
 
 const rootElement = document.getElementById("root");
 const routes = createBrowserRouter([
   {
-    path: "/login",
+    path: "/",
     element: <LoginPage />,
   },
   {
@@ -41,6 +42,7 @@ if (rootElement) {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <RouterProvider router={routes} />
+          <Toaster />
         </ThemeProvider>
       </QueryClientProvider>
     </React.StrictMode>,

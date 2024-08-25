@@ -3,8 +3,18 @@ export interface AuthProps {
   email: string;
   password: string;
 }
-
+export interface AuthResponse {
+  token: string;
+  role: string;
+}
 export interface RegisterProps {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+}
+export interface RegisterResponse {
+  id: string;
   name: string;
   email: string;
   password: string;
@@ -17,7 +27,6 @@ export interface EmployeeMin {
   name: string;
   rfid: string;
 }
-
 export interface Employee {
   id: string;
   name: string;
@@ -28,14 +37,12 @@ export interface Employee {
   createdAt: string;
   updatedAt?: string;
 }
-
 export interface GetEmployeesResponse {
   result: Employee[];
   totalRegisters: number;
   totalPages: number;
   currentPage: number;
 }
-
 export interface GetEmployeeByIdResponse {
   id: string;
   name: string;
@@ -46,7 +53,6 @@ export interface GetEmployeeByIdResponse {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface CreateEmployeeProps {
   name: string;
   position: string;
@@ -58,11 +64,7 @@ export interface CreateEmployeeProps {
 // ATTENDANCE TYPES
 export interface Attendance {
   attendanceId: string;
-  employee: {
-    id: string;
-    name: string;
-    rfid: string;
-  };
+  employee: EmployeeMin;
   clockedIn: string;
   lunchStart?: string;
   lunchEnd?: string;
@@ -73,14 +75,12 @@ export interface Attendance {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface GetAttendancesResponse {
   result: Attendance[];
   totalRegisters: number;
   totalPages: number;
   currentPage: number;
 }
-
 export type GetAttendancesByEmployeeIdResponse = Attendance[];
 
 // DAY OFF TYPES
@@ -89,15 +89,18 @@ export interface DayOff {
   reason: string;
   date: string;
 }
-
 export interface GetDaysOffResponse {
   result: DayOff[];
   totalRegisters: number;
   totalPages: number;
   currentPage: number;
 }
-
 export interface CreateDayOffProps {
+  reason: string;
+  date: string;
+}
+export interface CreateOrDeleteDayOffResponse {
+  id: string;
   reason: string;
   date: string;
 }
@@ -105,7 +108,37 @@ export interface CreateDayOffProps {
 // JOURNEY TYPES
 
 // SCHEDULE TYPES
+export interface RegisterStartTimeProps {
+  rfid: string;
+  clockedIn: string;
+}
+export interface RegisterLunchStartProps {
+  rfid: string;
+  lunchStart: string;
+}
+export interface RegisterLunchEndProps {
+  rfid: string;
+  lunchEnd: string;
+}
+export interface RegisterClockedOutProps {
+  rfid: string;
+  clockedOut: string;
+}
+export interface ScheduleResponse {
+  id: string;
+  employeeId: string;
+  date: string;
+  clockedIn: string;
+  delay: number;
+  hoursWorked: number;
+  extraTime: number;
+}
 
 // JUSTIFICATION TYPES
 
 // REPORT TYPES
+export interface GetReportProps {
+  initialDate: string;
+  finalDate: string;
+  rfid: string;
+}
