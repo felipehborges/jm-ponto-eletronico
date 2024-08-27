@@ -1,4 +1,3 @@
-import Footer from "@/components/page/footer";
 import { cn } from "@/lib/utils";
 import AttendancesTable from "./components/attendance-table";
 import ClockForm from "./components/clock-form";
@@ -22,8 +21,6 @@ export default function HomePage({ className }: { className?: string }) {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

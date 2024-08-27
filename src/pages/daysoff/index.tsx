@@ -33,9 +33,9 @@ import {
 } from "@/components/ui/table";
 import { cn, formatDate } from "@/lib/utils";
 import apiPonto from "@/services/api.routes";
-import type { DayOff } from "@/services/api.types";
+import type { CreateDayOffProps, DayOff } from "@/services/api.types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -47,12 +47,12 @@ const formSchema = z.object({
   dayOffDate: z.date(),
 });
 
-// {"id": "", "date": "2024-08-05T23:59:59.000Z", "reason": "TESTE", "createdAt": "", "updatedAt": ""}
+type FormSchema = z.infer<typeof formSchema>;
 
 export default function DaysOffPage() {
   const [date, setDate] = useState<Date>();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       dayOffName: "",
@@ -60,11 +60,23 @@ export default function DaysOffPage() {
     },
   });
 
-  function onSubmitHandler(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  const {
+    mutateAsync: createDayOff,
+    isSuccess: createDayOffSuccess,
+    error: createDayOffError,
+  } = useMutation({
+    mutationKey: ["apiPonto.createDayOff"],
+    mutationFn: async (dayOffProps: CreateDayOffProps) => {
+      const response = await apiPonto.createDayOff({ ...dayOffProps });
+      return response;
+    },
+    onSuccess: () => {
+      console.log("foi");
+    },
+    onError: (error) => {
+      console.error("error", error);
+    },
+  });
 
   const { data: getDaysOffData } = useQuery({
     queryKey: ["apiPonto.getDaysOff"],
@@ -73,6 +85,22 @@ export default function DaysOffPage() {
       return response.result;
     },
   });
+
+  const onSubmitHandler = async (data: FormSchema) => {
+    const dayOffData: CreateDayOffProps = {
+      reason: data.dayOffName,
+      date: data.dayOffDate.toDateString(),
+    };
+
+    try {
+      await createDayOff(dayOffData);
+      form.reset(); // Reset the form after successful submission
+      console.log("Day off created successfully");
+      console.log(dayOffData);
+    } catch (error) {
+      console.error("Failed to submit form", error);
+    }
+  };
 
   return (
     <PageTemplate>
