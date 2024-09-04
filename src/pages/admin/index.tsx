@@ -1,6 +1,6 @@
 import PageTemplate from "@/components/page/page-template";
-import apiPonto from "@/services/api.routes";
-import type { Attendance, EmployeeMin } from "@/services/api.types";
+import apiPonto from "@/services/ponto";
+import type { Attendance, EmployeeMin } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   LuBaggageClaim,

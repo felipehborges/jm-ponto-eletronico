@@ -32,8 +32,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn, formatDate } from "@/lib/utils";
-import apiPonto from "@/services/api.routes";
-import type { CreateDayOffProps, DayOff } from "@/services/api.types";
+import apiPonto from "@/services/ponto";
+import type { CreateDayOffProps, DayOff } from "@/services/ponto/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";

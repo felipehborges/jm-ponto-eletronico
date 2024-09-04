@@ -1,6 +1,4 @@
 import type {
-  AuthProps,
-  AuthResponse,
   CreateDayOffProps,
   CreateEmployeeProps,
   CreateOrDeleteDayOffResponse,
@@ -13,29 +11,10 @@ import type {
   RegisterClockedOutProps,
   RegisterLunchEndProps,
   RegisterLunchStartProps,
-  RegisterProps,
-  RegisterResponse,
   RegisterStartTimeProps,
   ScheduleResponse,
-} from "./api.types";
-import { API } from "./base";
-
-// AUTH SERVICES
-const auth = async (credentials: AuthProps) => {
-  const response = await API.post<AuthResponse>(
-    "/auth/authenticate",
-    credentials,
-  );
-  return response.data;
-};
-
-const register = async (credentials: RegisterProps) => {
-  const response = await API.post<RegisterResponse>(
-    "/auth/register",
-    credentials,
-  );
-  return response.data;
-};
+} from "./types";
+import { API } from "../base";
 
 // EMPLOYEE SERVICES
 const getEmployees = async () => {
@@ -117,8 +96,6 @@ const getReportHttp = async (props: GetReportProps) => {
 };
 
 const apiPonto = {
-  auth,
-  register,
   getEmployees,
   getEmployeeById,
   createEmployee,

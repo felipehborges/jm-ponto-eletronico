@@ -2,8 +2,8 @@ import JmTitle from "@/components/jm-title";
 import PageTemplate from "@/components/page/page-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import apiPonto from "@/services/api.routes";
-import type { AuthProps } from "@/services/api.types";
+import apiAuth from "@/services/auth";
+import type { AuthProps } from "@/services/ponto/types";
 import { useStore } from "@/store";
 import { useMutation } from "@tanstack/react-query";
 import { FaWhatsapp } from "react-icons/fa";
@@ -18,7 +18,7 @@ export default function LoginPage() {
   const { mutateAsync: login, isPending: loginPending } = useMutation({
     mutationKey: ["apiPonto.auth"],
     mutationFn: async (props: AuthProps) => {
-      const response = await apiPonto.auth({
+      const response = await apiAuth.auth({
         email: props?.email,
         password: props?.password,
       });

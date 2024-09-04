@@ -14,8 +14,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import apiPonto from "@/services/api.routes";
-import { RegisterStartTimeProps } from "@/services/api.types";
+import apiPonto from "@/services/ponto";
+import type { RegisterStartTimeProps } from "@/services/ponto/types";
 
 const FormSchema = z.object({
   rfid: z.string().min(1, "O campo de RFID é obrigatório"),

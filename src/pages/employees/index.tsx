@@ -7,11 +7,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import apiPonto from "@/services/ponto";
+import type { Employee } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
 import { LuPlus } from "react-icons/lu";
 import { Button } from "../../components/ui/button";
-import apiPonto from "@/services/api.routes";
-import type { Employee } from "@/services/api.types";
 
 export default function EmployeesPage() {
   const { data: employeesData } = useQuery({

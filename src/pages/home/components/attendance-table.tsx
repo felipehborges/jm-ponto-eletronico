@@ -5,8 +5,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatTime } from "@/lib/utils";
-import apiPonto from "@/services/api.routes";
-import type { Attendance } from "@/services/api.types";
+import apiPonto from "@/services/ponto";
+import type { Attendance } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function AttendancesTable() {

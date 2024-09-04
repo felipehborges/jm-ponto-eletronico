@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { today } from "@/lib/utils";
-import apiPonto from "@/services/api.routes";
-import type { Employee } from "@/services/api.types";
+import apiPonto from "@/services/ponto";
+import type { Employee } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function EmployeesCard() {
