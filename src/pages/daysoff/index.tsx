@@ -60,6 +60,14 @@ export default function DaysOffPage() {
     },
   });
 
+  const { data: getDaysOffData, refetch: refetchDaysOff } = useQuery({
+    queryKey: ["apiPonto.getDaysOff"],
+    queryFn: async () => {
+      const response = await apiPonto.getDaysOff();
+      return response.result;
+    },
+  });
+
   const {
     mutateAsync: createDayOff,
     isSuccess: createDayOffSuccess,
@@ -73,30 +81,30 @@ export default function DaysOffPage() {
     onSuccess: () => {
       console.log("foi");
     },
-    onError: (error) => {
-      console.error("error", error);
-    },
+    onError: (error) => console.error("error", error)
   });
 
-  const { data: getDaysOffData } = useQuery({
-    queryKey: ["apiPonto.getDaysOff"],
-    queryFn: async () => {
-      const response = await apiPonto.getDaysOff();
-      return response.result;
+  const { mutateAsync: deleteDayOff } = useMutation({
+    mutationKey: ["apiPonto.deleteDayOff"],
+    mutationFn: async (dayOffId: string) => {
+      const response = await apiPonto.deleteDayOff(dayOffId);
+      return response;
     },
-  });
+    onSuccess: () => {
+      refetchDaysOff();
+    },
+    onError: (error) => console.error("error", error)
+  })
 
   const onSubmitHandler = async (data: FormSchema) => {
     const dayOffData: CreateDayOffProps = {
       reason: data.dayOffName,
-      date: data.dayOffDate.toDateString(),
+      date: data.dayOffDate.toISOString(),
     };
-
     try {
       await createDayOff(dayOffData);
-      form.reset(); // Reset the form after successful submission
-      console.log("Day off created successfully");
-      console.log(dayOffData);
+      form.reset();
+      refetchDaysOff();
     } catch (error) {
       console.error("Failed to submit form", error);
     }
@@ -199,7 +207,7 @@ export default function DaysOffPage() {
                 <TableCell>{dayoff?.reason}</TableCell>
                 <TableCell>{formatDate(dayoff?.date)}</TableCell>
                 <TableCell className="text-center">
-                  <Button size="icon" variant="destructive">
+                  <Button onClick={() => deleteDayOff(dayoff?.id)} size="icon" variant="destructive">
                     <LuTrash />
                   </Button>
                 </TableCell>

@@ -13,7 +13,6 @@ const auth = async (credentials: AuthProps) => {
     "/auth/authenticate",
     credentials,
   );
-  // return response.data;
   const { role, token } = response.data;
 
   useStore.getState().setAccessToken(token);
