@@ -1,8 +1,10 @@
 import PageTemplate from "@/components/page/page-template";
+import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -51,6 +53,7 @@ type FormSchema = z.infer<typeof formSchema>;
 
 export default function DaysOffPage() {
   const [date, setDate] = useState<Date>();
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -68,21 +71,19 @@ export default function DaysOffPage() {
     },
   });
 
-  const {
-    mutateAsync: createDayOff,
-    isSuccess: createDayOffSuccess,
-    error: createDayOffError,
-  } = useMutation({
-    mutationKey: ["apiPonto.createDayOff"],
-    mutationFn: async (dayOffProps: CreateDayOffProps) => {
-      const response = await apiPonto.createDayOff({ ...dayOffProps });
-      return response;
-    },
-    onSuccess: () => {
-      console.log("foi");
-    },
-    onError: (error) => console.error("error", error)
-  });
+  const { mutateAsync: createDayOff, isPending: createDayOffPending } =
+    useMutation({
+      mutationKey: ["apiPonto.createDayOff"],
+      mutationFn: async (dayOffProps: CreateDayOffProps) => {
+        const response = await apiPonto.createDayOff({ ...dayOffProps });
+        return response;
+      },
+      onSuccess: () => {
+        refetchDaysOff();
+        setIsOpen(false);
+      },
+      onError: (error) => console.error("error", error),
+    });
 
   const { mutateAsync: deleteDayOff } = useMutation({
     mutationKey: ["apiPonto.deleteDayOff"],
@@ -93,8 +94,8 @@ export default function DaysOffPage() {
     onSuccess: () => {
       refetchDaysOff();
     },
-    onError: (error) => console.error("error", error)
-  })
+    onError: (error) => console.error("error", error),
+  });
 
   const onSubmitHandler = async (data: FormSchema) => {
     const dayOffData: CreateDayOffProps = {
@@ -105,6 +106,7 @@ export default function DaysOffPage() {
       await createDayOff(dayOffData);
       form.reset();
       refetchDaysOff();
+      setIsOpen(false);
     } catch (error) {
       console.error("Failed to submit form", error);
     }
@@ -113,9 +115,11 @@ export default function DaysOffPage() {
   return (
     <PageTemplate>
       <header className="w-full flex justify-center items-center pt-4 pb-8">
-        <Dialog>
-          <DialogTrigger>
-            <Button>Adicionar novo feriado</Button>
+        <Dialog open={isOpen}>
+          <DialogTrigger asChild>
+            <Button onClick={() => setIsOpen(true)}>
+              Adicionar novo feriado
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -181,7 +185,9 @@ export default function DaysOffPage() {
                       )}
                     />
                     <div className="w-full flex justify-end mt-10">
-                      <Button type="submit">Enviar</Button>
+                      <Button type="submit">
+                        {createDayOffPending ? <Spinner /> : "Enviar"}
+                      </Button>
                     </div>
                   </form>
                 </Form>
@@ -207,7 +213,11 @@ export default function DaysOffPage() {
                 <TableCell>{dayoff?.reason}</TableCell>
                 <TableCell>{formatDate(dayoff?.date)}</TableCell>
                 <TableCell className="text-center">
-                  <Button onClick={() => deleteDayOff(dayoff?.id)} size="icon" variant="destructive">
+                  <Button
+                    onClick={() => deleteDayOff(dayoff?.id)}
+                    size="icon"
+                    variant="destructive"
+                  >
                     <LuTrash />
                   </Button>
                 </TableCell>
