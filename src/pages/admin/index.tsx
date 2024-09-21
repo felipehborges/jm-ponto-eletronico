@@ -48,42 +48,43 @@ export default function AdminPage() {
 
   return (
     <PageTemplate>
-      <EmployeesCard />
+      <div className="lg:flex w-full">
+        <EmployeesCard className="min-w-[40%]" />
 
-      <section className="flex-wrap flex p-2">
-        <AdminCard
-          data={employeesData?.length}
-          icon={<LuUsers />}
-          description="Total de funcionários"
-        />
+        <section className="flex-wrap lg:justify-end w-full flex p-2">
+          <AdminCard
+            data={employeesData?.length}
+            icon={<LuUsers />}
+            description="Total de funcionários"
+          />
 
-        <AdminCard
-          data={todayAttendancesData?.length}
-          icon={<LuHammer />}
-          description="Trabalhando"
-        />
+          <AdminCard
+            data={todayAttendancesData?.length}
+            icon={<LuHammer />}
+            description="Trabalhando"
+          />
 
-        <AdminCard
-          data={
-            (employeesData?.length ?? 0) - (todayAttendancesData?.length ?? 0)
-          }
-          icon={<LuUserX />}
-          description="Inconsistências"
-        />
+          <AdminCard
+            data={
+              (employeesData?.length ?? 0) - (todayAttendancesData?.length ?? 0)
+            }
+            icon={<LuUserX />}
+            description="Inconsistências"
+          />
 
-        <AdminCard
-          data={lunchTime().length}
-          icon={<LuSandwich />}
-          description="Em horário de almoço"
-        />
+          <AdminCard
+            data={lunchTime().length}
+            icon={<LuSandwich />}
+            description="Em horário de almoço"
+          />
 
-        {/* TODO: Implementar lógica de férias */}
-        <AdminCard
+          {/* <AdminCard
           data={"{{ferias}}"}
           icon={<LuBaggageClaim />}
           description="Em período de férias"
-        />
-      </section>
+        /> */}
+        </section>
+      </div>
     </PageTemplate>
   );
 }

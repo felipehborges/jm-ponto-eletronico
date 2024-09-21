@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./components/theme-provider.tsx";
-import { Toaster } from "./components/ui/toaster.tsx";
+import { Toaster } from "./components/ui/sonner.tsx";
 import "./global.css";
 import AdminPage from "./pages/admin/index.tsx";
 import DaysOffPage from "./pages/daysoff/index.tsx";

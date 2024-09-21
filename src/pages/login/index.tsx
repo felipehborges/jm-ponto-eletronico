@@ -1,23 +1,33 @@
 import JmTitle from "@/components/jm-title";
 import PageTemplate from "@/components/page/page-template";
+import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import apiAuth from "@/services/auth";
-import { AuthProps } from "@/services/auth/types";
+import type { AuthProps } from "@/services/auth/types";
 import { useStore } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaWhatsapp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(2),
+const formSchema = z.object({
+  email: z.string().email({ message: "Email inválido" }),
+  password: z.string().min(2, { message: "Senha inválida" }),
 });
 
-type FormData = z.infer<typeof schema>;
+type FormData = z.infer<typeof formSchema>;
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -25,12 +35,16 @@ export default function LoginPage() {
     setAccessToken: s.setAccessToken,
   }));
 
-  const {handleSubmit,register} = useForm<FormData>({
-    resolver: zodResolver(schema)
-  })
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const { mutateAsync: mutateLogin, isPending: loginPending } = useMutation({
-    mutationKey: ["apiPonto.auth"],
+    mutationKey: ["apiAuth.auth"],
     mutationFn: async (props: AuthProps) => {
       const response = await apiAuth.auth({
         email: props?.email,
@@ -46,7 +60,9 @@ export default function LoginPage() {
         navigate("/home");
       }
     },
-    onError: (error) => console.error(error)
+    onError: () => {
+      toast.error("Usuário ou senha inválidos");
+    },
   });
 
   const onSubmitHandler = (data: FormData) => mutateLogin(data);
@@ -69,40 +85,66 @@ export default function LoginPage() {
             />
           </section>
 
-          <form onSubmit={handleSubmit(onSubmitHandler)} className="lg:pt-10 mt-10 gap-4 flex-1 lg:w-1/2 flex justify-center flex-col p-4 items-center w-full">
-            <div className="flex w-full items-center px-4 justify-center flex-col gap-2">
-              <Input
-              {...register("email")}
-                placeholder="Usuário"
-                type="email"
-                className="max-w-96 lg:h-14 lg:px-4 lg:text-lg"
-              />
-              <Input
-              {...register("password")}
-                placeholder="Senha"
-                type="password"
-                className="max-w-96 lg:h-14 lg:px-4 lg:text-lg"
-              />
-            </div>
-
-            <Button
-              size="lg"
-              className="lg:text-lg lg:py-6 lg:px-10"
-              disabled={loginPending}
-              type="submit"
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmitHandler)}
+              className="lg:pt-10 mt-10 gap-4 flex-1 lg:w-1/2 flex justify-center flex-col p-4 items-center w-full"
             >
-              Login
-            </Button>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel />
+                    <FormControl>
+                      <Input
+                        className="lg:w-96 w-60 lg:h-14 lg:px-4 lg:text-lg"
+                        placeholder="Usuário"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <a
-              href="https://wa.me/5511943735978"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 duration-200 transition-colors hover:text-green-500"
-            >
-              <FaWhatsapp className="text-2xl" />
-            </a>
-          </form>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel />
+                    <FormControl>
+                      <Input
+                        className="lg:w-96 w-60 lg:h-14 lg:px-4 lg:text-lg"
+                        placeholder="Senha"
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                className="mt-4 w-32"
+                disabled={loginPending}
+                type="submit"
+              >
+                {loginPending ? <Spinner /> : "Login"}
+              </Button>
+
+              <a
+                href="https://wa.me/5511943735978"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 duration-200 transition-colors hover:text-green-500"
+              >
+                <FaWhatsapp className="text-2xl" />
+              </a>
+            </form>
+          </Form>
         </div>
       </div>
     </PageTemplate>

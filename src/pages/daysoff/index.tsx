@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -43,9 +42,27 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuCalendar, LuTrash } from "react-icons/lu";
 import { z } from "zod";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
-  dayOffName: z.string().min(2).max(30),
+  dayOffName: z
+    .string()
+    .min(2, {
+      message: "O nome do day off deve conter no mínimo 2 caracteres.",
+    })
+    .max(30, {
+      message: "O nome do day off deve conter no máximo 30 caracteres.",
+    }),
   dayOffDate: z.date(),
 });
 
@@ -115,7 +132,15 @@ export default function DaysOffPage() {
   return (
     <PageTemplate>
       <header className="w-full flex justify-center items-center pt-4 pb-8">
-        <Dialog open={isOpen}>
+        <Dialog
+          open={isOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              form.reset();
+            }
+            setIsOpen(open);
+          }}
+        >
           <DialogTrigger asChild>
             <Button onClick={() => setIsOpen(true)}>
               Adicionar novo feriado
@@ -143,6 +168,7 @@ export default function DaysOffPage() {
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="dayOffDate"
@@ -184,8 +210,9 @@ export default function DaysOffPage() {
                         </FormItem>
                       )}
                     />
+
                     <div className="w-full flex justify-end mt-10">
-                      <Button type="submit">
+                      <Button type="submit" disabled={createDayOffPending}>
                         {createDayOffPending ? <Spinner /> : "Enviar"}
                       </Button>
                     </div>
@@ -213,13 +240,30 @@ export default function DaysOffPage() {
                 <TableCell>{dayoff?.reason}</TableCell>
                 <TableCell>{formatDate(dayoff?.date)}</TableCell>
                 <TableCell className="text-center">
-                  <Button
-                    onClick={() => deleteDayOff(dayoff?.id)}
-                    size="icon"
-                    variant="destructive"
-                  >
-                    <LuTrash />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button
+                        onClick={() => deleteDayOff(dayoff?.id)}
+                        size="icon"
+                        variant="destructive"
+                      >
+                        <LuTrash />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Excluir day off</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Tem certeza que deseja excluir o day off{" "}
+                          {dayoff?.reason}?
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction>Excluir</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}
