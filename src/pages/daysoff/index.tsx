@@ -1,11 +1,23 @@
 import PageTemplate from "@/components/page/page-template";
 import Spinner from "@/components/spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -41,18 +53,8 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LuCalendar, LuTrash } from "react-icons/lu";
+import { toast } from "sonner";
 import { z } from "zod";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
   dayOffName: z
@@ -88,21 +90,21 @@ export default function DaysOffPage() {
     },
   });
 
-  const { mutateAsync: createDayOff, isPending: createDayOffPending } =
-    useMutation({
-      mutationKey: ["apiPonto.createDayOff"],
-      mutationFn: async (dayOffProps: CreateDayOffProps) => {
-        const response = await apiPonto.createDayOff({ ...dayOffProps });
-        return response;
-      },
-      onSuccess: () => {
-        refetchDaysOff();
-        setIsOpen(false);
-      },
-      onError: (error) => console.error("error", error),
-    });
+  const { mutate: createDayOff, isPending: createDayOffPending } = useMutation({
+    mutationKey: ["apiPonto.createDayOff"],
+    mutationFn: async (dayOffProps: CreateDayOffProps) => {
+      const response = await apiPonto.createDayOff({ ...dayOffProps });
+      return response;
+    },
+    onSuccess: () => {
+      refetchDaysOff();
+      setIsOpen(false);
+      toast.success("Day off cadastrado com sucesso!");
+    },
+    onError: (error) => toast.error(error.message),
+  });
 
-  const { mutateAsync: deleteDayOff } = useMutation({
+  const { mutate: deleteDayOff } = useMutation({
     mutationKey: ["apiPonto.deleteDayOff"],
     mutationFn: async (dayOffId: string) => {
       const response = await apiPonto.deleteDayOff(dayOffId);
@@ -110,8 +112,9 @@ export default function DaysOffPage() {
     },
     onSuccess: () => {
       refetchDaysOff();
+      toast.success("Day off excluído com sucesso!");
     },
-    onError: (error) => console.error("error", error),
+    onError: (error) => toast.error(error.message),
   });
 
   const onSubmitHandler = async (data: FormSchema) => {
@@ -130,7 +133,7 @@ export default function DaysOffPage() {
   };
 
   return (
-    <PageTemplate>
+    <PageTemplate navbar footer={false}>
       <header className="w-full flex justify-center items-center pt-4 pb-8">
         <Dialog
           open={isOpen}
@@ -151,71 +154,69 @@ export default function DaysOffPage() {
               <DialogTitle>Cadastrar novo day off</DialogTitle>
               <DialogDescription>
                 <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmitHandler)}
-                    className="px-6 mt-10"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="dayOffName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Day off</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Nome do day off" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="dayOffDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <div className="flex flex-col gap-2 mt-4 w-full">
-                            <FormLabel>Data</FormLabel>
+                  <form onSubmit={form.handleSubmit(onSubmitHandler)}>
+                    <div className="m-4">
+                      <FormField
+                        control={form.control}
+                        name="dayOffName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Day off</FormLabel>
                             <FormControl>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <Button
-                                    variant={"outline"}
-                                    className={cn(
-                                      "justify-start text-left font-normal",
-                                      !date && "text-muted-foreground",
-                                    )}
-                                  >
-                                    <LuCalendar className="mr-2 h-4 w-4" />
-                                    {date ? (
-                                      format(date, "PPP")
-                                    ) : (
-                                      <span>Escolha uma data</span>
-                                    )}
-                                  </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0">
-                                  <Calendar
-                                    mode="single"
-                                    selected={date}
-                                    onSelect={setDate}
-                                    initialFocus
-                                    {...field}
-                                  />
-                                </PopoverContent>
-                              </Popover>
+                              <Input placeholder="Nome do day off" {...field} />
                             </FormControl>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <div className="w-full flex justify-end mt-10">
+                      <FormField
+                        control={form.control}
+                        name="dayOffDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="flex flex-col gap-2 mt-4 w-full">
+                              <FormLabel>Data</FormLabel>
+                              <FormControl>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <Button
+                                      variant={"outline"}
+                                      className={cn(
+                                        "justify-start text-left font-normal",
+                                        !date && "text-muted-foreground",
+                                      )}
+                                    >
+                                      <LuCalendar className="mr-2 h-4 w-4" />
+                                      {date ? (
+                                        format(date, "PPP")
+                                      ) : (
+                                        <span>Escolha uma data</span>
+                                      )}
+                                    </Button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                      mode="single"
+                                      selected={date}
+                                      onSelect={setDate}
+                                      initialFocus
+                                      {...field}
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                              </FormControl>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <DialogFooter>
                       <Button type="submit" disabled={createDayOffPending}>
                         {createDayOffPending ? <Spinner /> : "Enviar"}
                       </Button>
-                    </div>
+                    </DialogFooter>
                   </form>
                 </Form>
               </DialogDescription>
@@ -224,7 +225,10 @@ export default function DaysOffPage() {
         </Dialog>
       </header>
 
-      <div className="mx-auto max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl px-4 transition-all duration-500 ease-in-out">
+      <div
+        className="mx-auto max-
+      screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl px-4 transition-all duration-500 ease-in-out"
+      >
         <Table>
           <TableHeader>
             <TableRow>
@@ -242,11 +246,7 @@ export default function DaysOffPage() {
                 <TableCell className="text-center">
                   <AlertDialog>
                     <AlertDialogTrigger>
-                      <Button
-                        onClick={() => deleteDayOff(dayoff?.id)}
-                        size="icon"
-                        variant="destructive"
-                      >
+                      <Button type="button" size="icon" variant="destructive">
                         <LuTrash />
                       </Button>
                     </AlertDialogTrigger>
@@ -260,7 +260,11 @@ export default function DaysOffPage() {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction>Excluir</AlertDialogAction>
+                        <AlertDialogAction
+                          onClick={() => deleteDayOff(dayoff?.id)}
+                        >
+                          Excluir
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>

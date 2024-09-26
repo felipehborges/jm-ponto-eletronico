@@ -47,7 +47,7 @@ export default function AdminPage() {
   };
 
   return (
-    <PageTemplate>
+    <PageTemplate navbar footer={false}>
       <div className="lg:flex w-full">
         <EmployeesCard className="min-w-[40%]" />
 

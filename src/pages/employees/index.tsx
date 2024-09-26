@@ -1,4 +1,5 @@
 import PageTemplate from "@/components/page/page-template";
+import Title from "@/components/page/title";
 import {
   Table,
   TableBody,
@@ -23,17 +24,18 @@ export default function EmployeesPage() {
   });
 
   return (
-    <PageTemplate>
-      <div className=" mx-auto max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl px-4 transition-all duration-500 ease-in-out">
+    <PageTemplate navbar footer={false}>
+      {/* <Title title="Colaboradores" description="Visualize os colaboradores" /> */}
+
+      <div className="mx-auto max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl transition-all duration-500 ease-in-out">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="text-center">Foto</TableHead>
-              {/* <TableHead className="text-center">ID</TableHead> */}
               <TableHead className="text-center">Nome</TableHead>
               <TableHead className="text-center">Posição</TableHead>
               <TableHead className="text-center">RFID</TableHead>
-              <TableHead className="w-20 text-center">Detalhes</TableHead>
+              {/* <TableHead className="w-20 text-center">Detalhes</TableHead> */}
             </TableRow>
           </TableHeader>
 
@@ -51,11 +53,11 @@ export default function EmployeesPage() {
                 <TableCell>{employee?.name}</TableCell>
                 <TableCell>{employee?.position}</TableCell>
                 <TableCell>{employee?.rfid}</TableCell>
-                <TableCell className="text-center">
+                {/* <TableCell className="text-center">
                   <Button size="icon">
                     <LuPlus />
                   </Button>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
           </TableBody>
