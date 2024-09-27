@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
@@ -26,7 +25,7 @@ export default function EmployeesCard({ className }: { className?: string }) {
     <Card className={cn("mx-4 mt-4", className)}>
       {employeesDataLoading ? (
         <div className="flex m-4 flex-col space-y-3">
-          <Skeleton className="h-[125px] w-full rounded-xl" />
+          <Skeleton className="h-[100px] w-full rounded-xl" />
           <div className="space-y-2 px-1">
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-[90%]" />

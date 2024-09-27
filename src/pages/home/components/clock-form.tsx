@@ -1,6 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -10,12 +7,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import apiPonto from "@/services/ponto";
 import type { RegisterStartTimeProps } from "@/services/ponto/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const FormSchema = z.object({
   rfid: z.string().min(1, "O campo de RFID é obrigatório"),
@@ -69,7 +69,12 @@ export default function ClockForm() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input {...field} placeholder="RFID" className="w-full" />
+                <Input
+                  {...field}
+                  placeholder="RFID"
+                  autoFocus
+                  className="w-full"
+                />
               </FormControl>
             </FormItem>
           )}

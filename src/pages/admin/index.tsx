@@ -2,13 +2,7 @@ import PageTemplate from "@/components/page/page-template";
 import apiPonto from "@/services/ponto";
 import type { Attendance, EmployeeMin } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
-import {
-  LuBaggageClaim,
-  LuHammer,
-  LuSandwich,
-  LuUserX,
-  LuUsers,
-} from "react-icons/lu";
+import { LuHammer, LuSandwich, LuUserX, LuUsers } from "react-icons/lu";
 import AdminCard from "./components/card";
 import EmployeesCard from "./components/card-employees";
 

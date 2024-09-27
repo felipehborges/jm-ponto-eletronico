@@ -13,12 +13,8 @@ export default function HomeNavbar() {
       setVisible(currentScrollY < lastScrollY || currentScrollY <= 0);
       setLastScrollY(currentScrollY);
     };
-
     window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
   return (

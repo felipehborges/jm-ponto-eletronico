@@ -23,7 +23,7 @@ export default function AttendancesTable() {
   }
 
   return (
-    <div>
+    <div className="w-20">
       <TableBody>
         <TableRow>
           <TableHead className="w-full">Funcionário</TableHead>

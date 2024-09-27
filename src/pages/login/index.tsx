@@ -60,15 +60,13 @@ export default function LoginPage() {
         navigate("/home");
       }
     },
-    onError: () => {
-      toast.error("Usuário ou senha inválidos");
-    },
+    onError: () => toast.error("Usuário ou senha inválidos"),
   });
 
   const onSubmitHandler = (data: FormData) => mutateLogin(data);
 
   return (
-    <PageTemplate navbar={false}>
+    <PageTemplate footer navbar={false}>
       <div className="flex justify-center flex-col lg:pt-20 lg:px-20 p-4">
         <div className="flex-grow lg:flex">
           <section className="w-full lg:w-1/2 flex-1 flex justify-center flex-col items-center mt-10">

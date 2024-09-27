@@ -36,6 +36,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -82,7 +83,11 @@ export default function DaysOffPage() {
     },
   });
 
-  const { data: getDaysOffData, refetch: refetchDaysOff } = useQuery({
+  const {
+    data: getDaysOffData,
+    refetch: refetchDaysOff,
+    isFetching: daysOffDataFetching,
+  } = useQuery({
     queryKey: ["apiPonto.getDaysOff"],
     queryFn: async () => {
       const response = await apiPonto.getDaysOff();
@@ -123,7 +128,7 @@ export default function DaysOffPage() {
       date: data.dayOffDate.toISOString(),
     };
     try {
-      await createDayOff(dayOffData);
+      createDayOff(dayOffData);
       form.reset();
       refetchDaysOff();
       setIsOpen(false);
@@ -225,55 +230,61 @@ export default function DaysOffPage() {
         </Dialog>
       </header>
 
-      <div
-        className="mx-auto max-
-      screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl px-4 transition-all duration-500 ease-in-out"
-      >
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead className="w-20 text-center">Excluir</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {getDaysOffData?.map((dayoff: DayOff) => (
-              <TableRow key={dayoff?.id}>
-                <TableCell>{dayoff?.reason}</TableCell>
-                <TableCell>{formatDate(dayoff?.date)}</TableCell>
-                <TableCell className="text-center">
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Button type="button" size="icon" variant="destructive">
-                        <LuTrash />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Excluir day off</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Tem certeza que deseja excluir o day off{" "}
-                          {dayoff?.reason}?
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => deleteDayOff(dayoff?.id)}
-                        >
-                          Excluir
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>
+      {daysOffDataFetching ? (
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-3/4 mx-auto h-14" />
+          <Skeleton className="w-3/4 mx-auto h-14" />
+          <Skeleton className="w-3/4 mx-auto h-14" />
+          <Skeleton className="w-3/4 mx-auto h-14" />
+          <Skeleton className="w-3/4 mx-auto h-14" />
+        </div>
+      ) : (
+        <div className="mx-auto max-screen-sm lg:max-w-screen-md xl:max-w-screen-lg 2xl:max-w-screen-xl px-4 transition-all duration-500 ease-in-out">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead className="w-20 text-center">Excluir</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {getDaysOffData?.map((dayoff: DayOff) => (
+                <TableRow key={dayoff?.id}>
+                  <TableCell>{dayoff?.reason}</TableCell>
+                  <TableCell>{formatDate(dayoff?.date)}</TableCell>
+                  <TableCell className="text-center">
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Button type="button" size="icon" variant="destructive">
+                          <LuTrash />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Excluir day off</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Tem certeza que deseja excluir o day off{" "}
+                            <strong>{dayoff?.reason}</strong>?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteDayOff(dayoff?.id)}
+                          >
+                            Excluir
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </PageTemplate>
   );
 }
