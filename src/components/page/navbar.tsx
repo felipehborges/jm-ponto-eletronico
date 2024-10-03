@@ -3,7 +3,11 @@ import JmTitle from "../jm-title";
 import Menu from "../menu";
 import { ModeToggle } from "../mode-toggle";
 
-export default function Navbar({ pageTitle }: { pageTitle?: string }) {
+interface NavbarProps {
+  pageTitle?: string;
+}
+
+export default function Navbar({ ...props }: NavbarProps) {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
 
@@ -27,7 +31,7 @@ export default function Navbar({ pageTitle }: { pageTitle?: string }) {
       <div className="flex items-center gap-2">
         <JmTitle />
         <p className="text-primary font-bold text-2xl lg:text-4xl transition-all duration-200 ease-in-out">
-          {pageTitle}
+          {props.pageTitle}
         </p>
       </div>
       <ModeToggle />
