@@ -5,6 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// 2099-12-31T10:00:00.000Z -> 31/12/2099
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const year = date.getFullYear();
@@ -13,6 +14,7 @@ export function formatDate(dateString: string): string {
   return `${day}/${month}/${year}`;
 }
 
+// 2099-12-31T10:00:00.000Z -> 31/12/2099
 export function formatTime(dateString: string): string {
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) {

@@ -10,7 +10,7 @@ import type { Attendance } from "@/services/ponto/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function AttendancesTable() {
-  const { data: attendancesData, isLoading: attendancesIsLoading } = useQuery({
+  const attendances = useQuery({
     queryKey: ["apiPonto.getAttendances"],
     queryFn: async () => {
       const response = await apiPonto.getAttendances();
@@ -18,7 +18,7 @@ export default function AttendancesTable() {
     },
   });
 
-  if (attendancesIsLoading) {
+  if (attendances.isLoading) {
     return <p>Carregando...</p>;
   }
 
@@ -33,7 +33,7 @@ export default function AttendancesTable() {
           <TableHead className="text-center">Saída</TableHead>
         </TableRow>
 
-        {attendancesData?.map((attendance: Attendance) => (
+        {attendances.data?.map((attendance: Attendance) => (
           <TableRow key={attendance?.attendanceId}>
             <TableCell>{attendance?.employee?.name}</TableCell>
             <TableCell className="text-center">
