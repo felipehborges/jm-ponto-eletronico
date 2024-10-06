@@ -19,6 +19,7 @@ import type {
 } from "@/services/ponto/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,6 +30,11 @@ const FormSchema = z.object({
 });
 
 export default function ClockForm() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [rfidInput, setRfidInput] = useState("");
+  const [selectedAction, setSelectedAction] = useState("");
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -108,6 +114,53 @@ export default function ClockForm() {
     });
   };
 
+  const handleChange = (event: { target: { value: string } }) => {
+    setRfidInput(event.target.value);
+  };
+
+  const handleRfidSubmit = async (event: {
+    key: string;
+    preventDefault: () => void;
+  }) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const time = dayjs().utc().subtract(3, "hour").toDate();
+      console.log(time);
+
+      if (selectedAction === "clockedIn") {
+        await registerClockedIn.mutateAsync({
+          rfid: rfidInput,
+          clockedIn: time,
+        });
+      } else if (selectedAction === "lunchStart") {
+        await registerLunchStart.mutateAsync({
+          rfid: rfidInput,
+          lunchStart: time,
+        });
+      } else if (selectedAction === "lunchEnd") {
+        await registerLunchEnd.mutateAsync({ rfid: rfidInput, lunchEnd: time });
+      } else if (selectedAction === "clockedOut") {
+        await registerClockedOut.mutateAsync({
+          rfid: rfidInput,
+          clockedOut: time,
+        });
+      }
+
+      setRfidInput("");
+    }
+  };
+
+  useEffect(() => {
+    const checkFocus = () => {
+      if (inputRef.current && inputRef.current !== document.activeElement) {
+        inputRef.current.focus();
+      }
+    };
+    const intervalId = setInterval(checkFocus, 100);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -119,9 +172,14 @@ export default function ClockForm() {
               <FormControl>
                 <Input
                   {...field}
+                  ref={inputRef}
                   placeholder="RFID"
                   autoFocus
                   className="w-full"
+                  type="text"
+                  onChange={handleChange}
+                  onKeyDown={handleRfidSubmit}
+                  value={rfidInput}
                 />
               </FormControl>
             </FormItem>
