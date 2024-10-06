@@ -45,7 +45,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDayMonth } from "@/lib/utils";
 import apiPonto from "@/services/ponto";
 import type { CreateDayOffProps, DayOff } from "@/services/ponto/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -252,7 +252,7 @@ export default function DaysOffPage() {
               {getDaysOffData?.map((dayoff: DayOff) => (
                 <TableRow key={dayoff?.id}>
                   <TableCell>{dayoff?.reason}</TableCell>
-                  <TableCell>{formatDate(dayoff?.date)}</TableCell>
+                  <TableCell>{formatDayMonth(dayoff?.date)}</TableCell>
                   <TableCell className="text-center">
                     <AlertDialog>
                       <AlertDialogTrigger>
