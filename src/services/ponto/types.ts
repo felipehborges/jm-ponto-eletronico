@@ -85,21 +85,27 @@ export interface CreateOrDeleteDayOffResponse {
 // JOURNEY TYPES
 
 // SCHEDULE TYPES
+export interface ISchedule {
+  clockedIn?: string;
+  lunchStart?: string;
+  lunchEnd?: string;
+  clockedOut?: string;
+}
 export interface RegisterStartTimeProps {
   rfid: string;
-  clockedIn: string;
+  clockedIn: Date;
 }
 export interface RegisterLunchStartProps {
   rfid: string;
-  lunchStart: string;
+  lunchStart: Date;
 }
 export interface RegisterLunchEndProps {
   rfid: string;
-  lunchEnd: string;
+  lunchEnd: Date;
 }
 export interface RegisterClockedOutProps {
   rfid: string;
-  clockedOut: string;
+  clockedOut: Date;
 }
 export interface ScheduleResponse {
   id: string;

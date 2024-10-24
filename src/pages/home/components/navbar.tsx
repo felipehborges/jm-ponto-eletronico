@@ -23,7 +23,7 @@ export default function HomeNavbar() {
         visible ? "" : "-translate-y-full"
       }`}
     >
-      <div>
+      <div className="py-6">
         <JmTitle />
         {today}
       </div>
